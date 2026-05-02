@@ -2,18 +2,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-// Enum for severity — restricts values to only LOW, MEDIUM, HIGH
-// This is better than using plain strings because typos like "HGIH" become impossible
 enum Severity {
     LOW, MEDIUM, HIGH
 }
 
-// Enum for status — only these three states are allowed
 enum Status {
     OPEN, IN_PROGRESS, RESOLVED
 }
 
-// This class represents one Bug — all its data lives here
 class Bug {
     String id;
     String title;
@@ -21,16 +17,14 @@ class Bug {
     Severity severity;
     Status status;
 
-    // Constructor — called when a new Bug is created
     Bug(String id, String title, String description, Severity severity) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.severity = severity;
-        this.status = Status.OPEN; // Every new bug starts as OPEN
+        this.status = Status.OPEN; 
     }
 
-    // Prints bug details in a clean readable format
     public void display() {
         System.out.println("---------------------------");
         System.out.println("Bug ID    : " + id);
@@ -44,11 +38,10 @@ class Bug {
 
 public class BugTracker {
 
-    // HashMap stores bugs — key is Bug ID (String), value is the Bug object
-    // HashMap gives O(1) lookup — finding any bug by ID is instant regardless of how many bugs exist
+
     static HashMap<String, Bug> bugMap = new HashMap<>();
     static Scanner scanner = new Scanner(System.in);
-    static int bugCounter = 1; // Auto-generates bug IDs like BUG001, BUG002
+    static int bugCounter = 1; 
 
     public static void main(String[] args) {
         System.out.println("===== Bug Tracker — Inspired by BrickRed Systems =====");
@@ -84,9 +77,7 @@ public class BugTracker {
         }
     }
 
-    // Creates a new Bug and puts it into the HashMap
     static void logBug() {
-        // Auto-generate Bug ID — BUG001, BUG002, BUG003 and so on
         String id = String.format("BUG%03d", bugCounter++);
 
         System.out.print("Enter Bug Title: ");
@@ -100,20 +91,18 @@ public class BugTracker {
 
         Severity severity;
         try {
-            severity = Severity.valueOf(sevInput); // Converts string to Enum safely
+            severity = Severity.valueOf(sevInput);
         } catch (IllegalArgumentException e) {
             System.out.println("Invalid severity. Bug not logged.");
-            bugCounter--; // Roll back the counter since bug was not saved
+            bugCounter--; 
             return;
         }
 
-        // Create Bug object and store in HashMap with ID as key
         Bug newBug = new Bug(id, title, description, severity);
         bugMap.put(id, newBug);
         System.out.println("Bug logged with ID: " + id);
     }
 
-    // Loops through all entries in the HashMap and displays each bug
     static void viewAllBugs() {
         if (bugMap.isEmpty()) {
             System.out.println("No bugs logged.");
@@ -125,12 +114,11 @@ public class BugTracker {
         }
     }
 
-    // HashMap get() retrieves a bug by ID in O(1) time
     static void searchBug() {
         System.out.print("Enter Bug ID: ");
         String id = scanner.nextLine().toUpperCase();
 
-        Bug bug = bugMap.get(id); // Direct lookup — no loop needed
+        Bug bug = bugMap.get(id);
         if (bug != null) {
             bug.display();
         } else {
@@ -138,7 +126,6 @@ public class BugTracker {
         }
     }
 
-    // Finds bug by ID and changes its status
     static void updateStatus() {
         System.out.print("Enter Bug ID to update: ");
         String id = scanner.nextLine().toUpperCase();
@@ -160,7 +147,6 @@ public class BugTracker {
         }
     }
 
-    // Only allows deletion if the bug is RESOLVED — open bugs cannot be deleted
     static void deleteResolvedBug() {
         System.out.print("Enter Bug ID to delete: ");
         String id = scanner.nextLine().toUpperCase();
@@ -180,7 +166,6 @@ public class BugTracker {
         System.out.println("Bug " + id + " deleted successfully.");
     }
 
-    // Counts total, open, in-progress, and resolved bugs for a dashboard view
     static void showSummary() {
         int total = bugMap.size();
         int open = 0, inProgress = 0, resolved = 0;
@@ -199,7 +184,6 @@ public class BugTracker {
         System.out.println("=======================");
     }
 
-    // Filters bugs by severity — loops through and prints only matching ones
     static void filterBySeverity() {
         System.out.println("Enter Severity to filter (LOW / MEDIUM / HIGH): ");
         String sevInput = scanner.nextLine().toUpperCase();
